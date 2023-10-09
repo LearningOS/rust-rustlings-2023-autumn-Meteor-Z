@@ -9,7 +9,6 @@
 // Execute `rustlings hint errors6` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
 use std::num::ParseIntError;
 
@@ -31,8 +30,20 @@ impl ParsePosNonzeroError {
 fn parse_pos_nonzero(s: &str) -> Result<PositiveNonzeroInteger, ParsePosNonzeroError> {
     // TODO: change this to return an appropriate error instead of panicking
     // when `parse()` returns an error.
-    let x: i64 = s.parse().unwrap();
-    PositiveNonzeroInteger::new(x).map_err(ParsePosNonzeroError::from_creation)
+    let x = s.parse::<i64>();
+    
+    if x.is_ok() {
+        let x: Result<PositiveNonzeroInteger, CreationError> = PositiveNonzeroInteger::new(x.unwrap());
+
+        if x.is_ok() {
+            return Ok(x.unwrap());
+        } else {
+            return Err(ParsePosNonzeroError::Creation(x.err().unwrap()));
+        }
+    } else {
+        return Err(ParsePosNonzeroError::ParseInt(x.err().unwrap()));
+    }
+    // PositiveNonzeroInteger::new(x).map_err(ParsePosNonzeroError::from_creation)
 }
 
 // Don't change anything below this line.
