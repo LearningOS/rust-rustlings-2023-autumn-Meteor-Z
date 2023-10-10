@@ -40,11 +40,24 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of
 // Person Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
-
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
-        
+        let values: Vec<&str> = s.split(',').collect();
+        if values.len() != 2 {
+            return Person::default();
+        } else if values[0].len() > 0 {
+            let age = values[1].parse::<usize>();
+            if age.is_ok() {
+                return Person {
+                    name: values[0].into(),
+                    age: age.unwrap(),
+                };
+            } else {
+                return Person::default();
+            }
+        }
+
+        return Person::default();
     }
 }
 
